@@ -75,17 +75,16 @@ event QueryEvent {
   // Constante propia de la clase, atributo
   val value : String
 
-  // Método new
+  // Método new.
+  // Esto es importante, porque no encontré ejemplos con
+  // eventos que utilicen múltiples argumentos en el llamado
+  // emit(new QueryEvent("Producto",23))
+
   new (string : String, id : long) {
     this.value = string
     this.id = id
   }
 }
 ```
-
-
-
-
-
 
 
