@@ -1,0 +1,56 @@
+package broker.example
+
+import io.sarl.core.Logging
+import io.sarl.core.Initialize
+import io.sarl.core.Destroy
+import io.sarl.core.DefaultContextInteractions
+import java.util.Random
+
+event SendBuy {
+	val product : String
+	
+	new (product : String){
+		this.product = product
+	}
+}
+
+event SendDecline {
+	val product : String
+
+	new (product : String) {
+		this.product = product
+	}
+}
+
+agent UserAgent {
+
+	uses Logging, DefaultContextInteractions
+	
+	var productoDeseado:String = ""
+	val precioDeseado : double = 100.0
+
+	var productos = newArrayList('Computadora', 'Monitor', 'Mouse', 'Teclado')
+	
+	on Initialize {
+		val index : int = new Random().nextInt(productos.length)
+		this.productoDeseado = productos.get(index);
+		info("Hola quiero comprar: " + this.productoDeseado)
+		emit(new SendQuery(this.productoDeseado))
+	}
+	
+	on SendBestOfferToUser {
+		if (occurrence.cost < this.precioDeseado) {
+				info("Comprar")
+				emit(new SendBuy(this.productoDeseado))
+			} else {
+				info("Rechazar")
+				emit(new SendDecline(this.productoDeseado))		
+			}
+		
+	}
+
+	on Destroy {
+		info("Chau!")
+	}
+
+}

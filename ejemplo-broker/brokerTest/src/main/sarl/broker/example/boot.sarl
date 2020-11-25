@@ -1,0 +1,21 @@
+package broker.example
+
+
+import io.sarl.core.Lifecycle
+import io.sarl.core.Logging
+import io.sarl.core.Initialize
+
+agent Boot {
+
+	uses Lifecycle, Logging
+
+	on Initialize {
+		spawn(BrokerAgent)
+		for (var i : int = 0; i < 5; i++) {
+			spawn(SellerAgent)	
+		}
+		spawn(UserAgent)
+	}
+
+}
+

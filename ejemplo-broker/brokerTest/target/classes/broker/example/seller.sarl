@@ -1,0 +1,52 @@
+package broker.example
+
+import io.sarl.core.Initialize
+import io.sarl.core.Logging
+import io.sarl.core.Destroy
+import io.sarl.core.DefaultContextInteractions
+import java.util.Random
+
+event SellerAnswer {
+	val price : double
+	val sku : String
+	
+	new (string : String, price : double) {
+		this.sku = string
+		this.price = price
+	}
+}
+
+agent SellerAgent {
+	
+	uses Logging, DefaultContextInteractions
+
+	val generador  = new Random()
+	val stock : long = 10
+	var value : double = 1.0
+	var product : String = "Computadora"
+	
+	var productos = newArrayList('Computadora', 'Monitor', 'Mouse', 'Teclado')
+	
+	on Initialize {
+		val index : int = new Random().nextInt(productos.length)
+		this.product = productos.get(index);
+		info("Quiero vender!" + this.product)
+		this.value = this.generador.nextInt(101)
+	}
+
+	on QueryEventOnSellers {
+		//info("Alguien preguntó por: " + occurrence.sku)
+		if (occurrence.sku == ("prod_" + this.product)) {
+				info("Yo tengo!")
+				
+				var sku : String
+				sku = "prod_" + occurrence.sku
+				emit(new SellerAnswer(sku, this.value))
+			}
+	}
+
+	on Destroy {
+		info("Chau!")
+	}
+	
+}

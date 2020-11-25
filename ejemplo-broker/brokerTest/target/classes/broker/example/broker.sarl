@@ -1,0 +1,79 @@
+package broker.example
+
+import io.sarl.core.Initialize
+import io.sarl.core.Logging
+import io.sarl.core.Destroy
+import io.sarl.core.DefaultContextInteractions
+
+// Como una clase
+event SendQuery {
+	// Variable privadas
+	val product : String
+	
+	// Método new
+	new (string : String) {
+		this.product = string
+	}
+}
+
+event QueryEventOnSellers {
+	val sku : String
+	
+	new (string : String) {
+		this.sku = string
+	}
+}
+
+event SendBestOfferToUser {
+	val product : String
+	val cost : double
+	
+	new (product: String, cost : double) {
+		this.product = product
+		this.cost = cost
+	}
+}
+
+agent BrokerAgent{
+	
+	uses Logging, DefaultContextInteractions
+	
+	on Initialize {
+		info("En que puedo ayudar?")
+	}
+
+	on Destroy {
+		info("Chau!")
+	}
+	
+
+	// ---------------------------------------- user ----------------------------------------
+	on SendQuery {
+		info(" quiere comprar: " + occurrence.product)
+		var sku : String
+
+		sku = "prod_" + occurrence.product
+		// Podría emitir en otro contexto para que user no vea las operaciones directo
+		
+		emit(new QueryEventOnSellers(sku))
+	}
+	
+	
+	on SendBuy {
+		info("compra")
+	}
+
+	on SendDecline {
+		info("NO compra")
+	}
+	
+	// ---------------------------------------- sellers ----------------------------------------
+	on SellerAnswer {
+		// TODO: agregar las respuestas a una lista
+		var product : String
+		
+		product = occurrence.sku.substring(new String("prod_").length())
+		emit(new SendBestOfferToUser(product, occurrence.price))
+	}
+
+}
