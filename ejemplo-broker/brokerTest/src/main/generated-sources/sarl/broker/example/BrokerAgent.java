@@ -21,8 +21,10 @@ import io.sarl.lang.core.DynamicSkillProvider;
 import io.sarl.lang.core.Skill;
 import io.sarl.lang.util.ClearableReference;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.UUID;
 import javax.inject.Inject;
+import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Inline;
 import org.eclipse.xtext.xbase.lib.Pure;
@@ -31,6 +33,8 @@ import org.eclipse.xtext.xbase.lib.Pure;
 @SarlElementType(18)
 @SuppressWarnings("all")
 public class BrokerAgent extends Agent {
+  private HashMap<String, Double> ofertas = CollectionLiterals.<String, Double>newHashMap();
+  
   private void $behaviorUnit$Initialize$0(final Initialize occurrence) {
     Logging _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER = this.$castSkill(Logging.class, (this.$CAPACITY_USE$IO_SARL_CORE_LOGGING == null || this.$CAPACITY_USE$IO_SARL_CORE_LOGGING.get() == null) ? (this.$CAPACITY_USE$IO_SARL_CORE_LOGGING = this.$getSkill(Logging.class)) : this.$CAPACITY_USE$IO_SARL_CORE_LOGGING);
     _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER.info("En que puedo ayudar?");
@@ -64,6 +68,12 @@ public class BrokerAgent extends Agent {
   private void $behaviorUnit$SellerAnswer$5(final SellerAnswer occurrence) {
     String product = null;
     product = occurrence.sku.substring(new String("prod_").length());
+    Logging _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER = this.$castSkill(Logging.class, (this.$CAPACITY_USE$IO_SARL_CORE_LOGGING == null || this.$CAPACITY_USE$IO_SARL_CORE_LOGGING.get() == null) ? (this.$CAPACITY_USE$IO_SARL_CORE_LOGGING = this.$getSkill(Logging.class)) : this.$CAPACITY_USE$IO_SARL_CORE_LOGGING);
+    String _substring = occurrence.sku.substring(new String("prod_").length());
+    _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER.info(("Respuesta: " + _substring));
+    this.ofertas.put(product, Double.valueOf(occurrence.price));
+    Logging _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER_1 = this.$castSkill(Logging.class, (this.$CAPACITY_USE$IO_SARL_CORE_LOGGING == null || this.$CAPACITY_USE$IO_SARL_CORE_LOGGING.get() == null) ? (this.$CAPACITY_USE$IO_SARL_CORE_LOGGING = this.$getSkill(Logging.class)) : this.$CAPACITY_USE$IO_SARL_CORE_LOGGING);
+    _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER_1.info(this.ofertas);
     DefaultContextInteractions _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER = this.$castSkill(DefaultContextInteractions.class, (this.$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS == null || this.$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS.get() == null) ? (this.$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS = this.$getSkill(DefaultContextInteractions.class)) : this.$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS);
     SendBestOfferToUser _sendBestOfferToUser = new SendBestOfferToUser(product, occurrence.price);
     _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER.emit(_sendBestOfferToUser);
@@ -145,6 +155,21 @@ public class BrokerAgent extends Agent {
     assert occurrence != null;
     assert ___SARLlocal_runnableCollection != null;
     ___SARLlocal_runnableCollection.add(() -> $behaviorUnit$SellerAnswer$5(occurrence));
+  }
+  
+  @Override
+  @Pure
+  @SyntheticMember
+  public boolean equals(final Object obj) {
+    return super.equals(obj);
+  }
+  
+  @Override
+  @Pure
+  @SyntheticMember
+  public int hashCode() {
+    int result = super.hashCode();
+    return result;
   }
   
   @SyntheticMember

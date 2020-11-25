@@ -4,6 +4,7 @@ import io.sarl.core.Initialize
 import io.sarl.core.Logging
 import io.sarl.core.Destroy
 import io.sarl.core.DefaultContextInteractions
+import java.util.HashMap
 
 // Como una clase
 event SendQuery {
@@ -37,6 +38,8 @@ event SendBestOfferToUser {
 agent BrokerAgent{
 	
 	uses Logging, DefaultContextInteractions
+	var ofertas : HashMap<String,Double> = newHashMap()
+	
 	
 	on Initialize {
 		info("En que puedo ayudar?")
@@ -73,6 +76,12 @@ agent BrokerAgent{
 		var product : String
 		
 		product = occurrence.sku.substring(new String("prod_").length())
+
+		info("Respuesta: " + occurrence.sku.substring(new String("prod_").length()))
+		this.ofertas.put(product,occurrence.price);
+		
+		info(this.ofertas)
+		
 		emit(new SendBestOfferToUser(product, occurrence.price))
 	}
 

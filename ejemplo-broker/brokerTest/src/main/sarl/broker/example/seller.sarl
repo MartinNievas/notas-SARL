@@ -30,14 +30,13 @@ agent SellerAgent {
 	on Initialize {
 		val index : int = new Random().nextInt(productos.length)
 		this.product = productos.get(index);
-		info("Quiero vender!" + this.product)
-		this.value = this.generador.nextInt(101)
+		this.value = this.generador.nextFloat() * 100
+		info("Quiero vender! " + this.product + " $: " + this.value)
 	}
 
 	on QueryEventOnSellers {
-		//info("Alguien preguntó por: " + occurrence.sku)
-		if (occurrence.sku == ("prod_" + this.product)) {
-				info("Yo tengo!")
+		if (occurrence.sku.equals("prod_" + new String(this.product))) {
+				info("Yo tengo! " + this.value)
 				
 				var sku : String
 				sku = "prod_" + occurrence.sku

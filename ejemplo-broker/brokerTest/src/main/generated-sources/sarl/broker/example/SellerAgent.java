@@ -2,7 +2,6 @@ package broker.example;
 
 import broker.example.QueryEventOnSellers;
 import broker.example.SellerAnswer;
-import com.google.common.base.Objects;
 import io.sarl.core.DefaultContextInteractions;
 import io.sarl.core.Destroy;
 import io.sarl.core.Initialize;
@@ -19,6 +18,7 @@ import io.sarl.lang.core.Skill;
 import io.sarl.lang.util.ClearableReference;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 import javax.inject.Inject;
@@ -45,16 +45,18 @@ public class SellerAgent extends Agent {
   private void $behaviorUnit$Initialize$0(final Initialize occurrence) {
     final int index = new Random().nextInt(((Object[])Conversions.unwrapArray(this.productos, Object.class)).length);
     this.product = this.productos.get(index);
+    float _nextFloat = this.generador.nextFloat();
+    this.value = (_nextFloat * 100);
     Logging _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER = this.$castSkill(Logging.class, (this.$CAPACITY_USE$IO_SARL_CORE_LOGGING == null || this.$CAPACITY_USE$IO_SARL_CORE_LOGGING.get() == null) ? (this.$CAPACITY_USE$IO_SARL_CORE_LOGGING = this.$getSkill(Logging.class)) : this.$CAPACITY_USE$IO_SARL_CORE_LOGGING);
-    _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER.info(("Quiero vender!" + this.product));
-    this.value = this.generador.nextInt(101);
+    _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER.info(((("Quiero vender! " + this.product) + " $: ") + Double.valueOf(this.value)));
   }
   
   private void $behaviorUnit$QueryEventOnSellers$1(final QueryEventOnSellers occurrence) {
-    boolean _equals = Objects.equal(occurrence.sku, ("prod_" + this.product));
+    String _string = new String(this.product);
+    boolean _equals = occurrence.sku.equals(("prod_" + _string));
     if (_equals) {
       Logging _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER = this.$castSkill(Logging.class, (this.$CAPACITY_USE$IO_SARL_CORE_LOGGING == null || this.$CAPACITY_USE$IO_SARL_CORE_LOGGING.get() == null) ? (this.$CAPACITY_USE$IO_SARL_CORE_LOGGING = this.$getSkill(Logging.class)) : this.$CAPACITY_USE$IO_SARL_CORE_LOGGING);
-      _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER.info("Yo tengo!");
+      _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER.info(("Yo tengo! " + Double.valueOf(this.value)));
       String sku = null;
       sku = ("prod_" + occurrence.sku);
       DefaultContextInteractions _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER = this.$castSkill(DefaultContextInteractions.class, (this.$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS == null || this.$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS.get() == null) ? (this.$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS = this.$getSkill(DefaultContextInteractions.class)) : this.$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS);
@@ -137,7 +139,7 @@ public class SellerAgent extends Agent {
       return false;
     if (Double.doubleToLongBits(other.value) != Double.doubleToLongBits(this.value))
       return false;
-    if (!java.util.Objects.equals(this.product, other.product)) {
+    if (!Objects.equals(this.product, other.product)) {
       return false;
     }
     return super.equals(obj);
@@ -151,7 +153,7 @@ public class SellerAgent extends Agent {
     final int prime = 31;
     result = prime * result + (int) (this.stock ^ (this.stock >>> 32));
     result = prime * result + (int) (Double.doubleToLongBits(this.value) ^ (Double.doubleToLongBits(this.value) >>> 32));
-    result = prime * result + java.util.Objects.hashCode(this.product);
+    result = prime * result + Objects.hashCode(this.product);
     return result;
   }
   

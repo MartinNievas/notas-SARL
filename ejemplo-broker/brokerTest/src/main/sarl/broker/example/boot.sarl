@@ -11,7 +11,7 @@ agent Boot {
 
 	on Initialize {
 		spawn(BrokerAgent)
-		for (var i : int = 0; i < 5; i++) {
+		for (var i : int = 0; i < 10; i++) {
 			spawn(SellerAgent)	
 		}
 		spawn(UserAgent)
