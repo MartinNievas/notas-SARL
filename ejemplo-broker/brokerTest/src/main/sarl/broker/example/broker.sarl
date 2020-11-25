@@ -5,6 +5,7 @@ import io.sarl.core.Logging
 import io.sarl.core.Destroy
 import io.sarl.core.DefaultContextInteractions
 import java.util.HashMap
+import java.util.Iterator
 
 // Como una clase
 event SendQuery {
@@ -72,7 +73,6 @@ agent BrokerAgent{
 	
 	// ---------------------------------------- sellers ----------------------------------------
 	on SellerAnswer {
-		// TODO: agregar las respuestas a una lista
 		var product : String
 		
 		product = occurrence.sku.substring(new String("prod_").length())
@@ -81,6 +81,8 @@ agent BrokerAgent{
 		this.ofertas.put(product,occurrence.price);
 		
 		info(this.ofertas)
+		// TODO: Ordenar de menor a mayor
+		// var iter <String> : Iterator= this.ofertas.iterator();
 		
 		emit(new SendBestOfferToUser(product, occurrence.price))
 	}
