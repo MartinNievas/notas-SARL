@@ -10,5 +10,5 @@
 
 
 ## Código
-Compilado con la versión 8 de [SARL](www.sarl.io)
+Compilado con la versión 0.8.6 de [SARL](www.sarl.io)
 
